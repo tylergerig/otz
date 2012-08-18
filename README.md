@@ -1,4 +1,1 @@
-otz
-===
-
-Oily T-Zone: A Tank Game
+# Oily T-Zone: A Tank Game

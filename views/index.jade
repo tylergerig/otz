@@ -1,0 +1,50 @@
+doctype 5
+html
+  head
+    title OTZ
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js')
+    script(src='javascripts/jwerty.js')
+    script(src='socket.io/socket.io.js')
+  body
+    h1 OTZ
+    pre.world
+    script
+      var socket = io.connect(location);
+      var world;
+      socket.on('world', function(data) {
+        world = data;
+        jwerty.key('arrow-left', function() {
+          socket.emit("move", {dir: "left"})
+        });
+        jwerty.key('arrow-right', function() {
+          socket.emit("move", {dir: "right"})
+        });
+        jwerty.key('arrow-up', function() {
+          socket.emit("move", {dir: "up"})
+        });
+        jwerty.key('arrow-down', function(e) {
+          socket.emit("move", {dir: "down"})
+          event.preventDefault();
+        });
+        render();
+      });
+      socket.on('moved', function(data) {
+        world.player.location = data.location;
+        render();
+      });
+
+      var render = function() {
+        $world = $(".world");
+        $world.empty();
+        for(var i = 0; i < world.map.length; i++) {
+          for(var j = 0; j < world.map[i].length; j++) {
+            if(world.player.location.x === j && world.player.location.y === i) {
+              $world.append("\u263A");
+            } else {
+              $world.append(world.map[i][j].navigable ? " " : "\u2588");
+            }
+          }
+          $world.append("\n");
+        }
+      };

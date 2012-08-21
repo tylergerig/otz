@@ -1,18 +1,53 @@
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
 
+body {
+  background:#333;
+  color:#fff;
+}
+
+.container {
+  margin:10px auto;
+  width:660px;
+  padding:10px;
+}
+
+h1 {
+  font-size:1.5em;
+  font-family: Consolas, monospace;
+}
+
 .world {
+  position:relative;
+  padding:10px;
+  background:#444;
 }
 
 .world .player {
-  background:white;
+  background:url(/img/tank.png) center center no-repeat;
   position:absolute;
   width:16px;
   height:16px;
   padding:2px;
 }
   .world .you {
-    background:red;
+    background:url(/img/you.png) center center no-repeat;
+  }
+
+.world .bullet {
+  background:white;
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:2px;
+  margin:8px;
+}
+  .world .bullet.destroyed {
+    background: orange;
+    width:8px;
+    height:8px;
+    margin:6px;
+    border-radius:4px;
   }
 
 .world .cell {
@@ -22,11 +57,25 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
   float:left;
 }
   .cell.grass {
-    background:green;
+    background:green url(/img/texture-grass.png);
   }
   .cell.rock {
-    background:grey;
+    background:grey url(/img/texture-rock.png);
   }
 .world .row {
   clear:both;
 }
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+

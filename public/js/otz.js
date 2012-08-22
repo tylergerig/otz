@@ -63,6 +63,10 @@ var removeBullet = function(bullet) {
   $("#"+bullet.id).addClass('destroyed').fadeOut("fast", function() { $(this).remove(); });
 }
 
+socket.on('player-nick', function(data) {
+  toast(data.oldNick + " is now known as " + data.player.nick);
+});
+
 socket.on('player-died', function(data) {
   killPlayer(data.player, data.killer);
 });

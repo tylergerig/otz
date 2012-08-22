@@ -130,6 +130,14 @@ var renderPlayer = function(player, you) {
   }
 };
 
+socket.on('disconnect', function() {
+  toast('Lost connection to the game server.');
+});
+
+socket.on('reconnect', function() {
+  toast('Reconnected to the game server.');
+});
+
 var render = function() {
   $world = $(".world");
   $world.empty();

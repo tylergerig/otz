@@ -63,8 +63,16 @@ var removeBullet = function(bullet) {
   $("#"+bullet.id).addClass('destroyed').fadeOut("fast", function() { $(this).remove(); });
 }
 
-socket.on('quit', function(data) {
-  console.log('quit');
+socket.on('player-died', function(data) {
+  killPlayer(data.player, data.killer);
+});
+
+socket.on('player-joined', function(data) {
+  toast(data.player.nick + " has joined the fray!");
+});
+
+socket.on('player-quit', function(data) {
+  toast(data.player.nick + " has left the fray!");
   removePlayer(data.player);
 });
 
@@ -76,6 +84,25 @@ var renderPlayers = function(players) {
   for(var i = 0; i < players.length; i++) {
     renderPlayer(players[i]);
   }
+};
+
+var killPlayer = function(player, killer) {
+  var $el = $("#"+player.id);
+
+  var angle = 0;
+  if(player.dir) {
+    if(player.dir === 'right') angle = 90;
+    else if(player.dir === 'down') angle = 180;
+    else if(player.dir === 'left') angle = 270;
+  }
+
+  // Add some randomness
+  angle += Math.floor(Math.random() * 50 - 25);
+
+  $el.css('transform', 'rotate('+angle+'deg)');
+  $el.fadeOut(500, function() { $(this).remove() });
+
+  toast(killer.nick + " killed " + player.nick);
 };
 
 var renderPlayer = function(player, you) {
@@ -114,4 +141,8 @@ var render = function() {
       $row.append($cell.addClass(world.map[i][j].material));
     }
   }
+};
+
+var toast = function(message) {
+  $().toastmessage('showNoticeToast', message);
 };

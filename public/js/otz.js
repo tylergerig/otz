@@ -1,35 +1,54 @@
 var socket = io.connect(location);
 var world;
-socket.on('world', function(data) {
+socket.on('game-enter', function(data) {
   world = data;
   jwerty.key('a/arrow-left', function() {
-    socket.emit("move", {dir: "left"})
+    socket.emit("player-move", {dir: "left"})
     event.preventDefault();
   });
   jwerty.key('d/arrow-right', function() {
-    socket.emit("move", {dir: "right"})
+    socket.emit("player-move", {dir: "right"})
     event.preventDefault();
   });
   jwerty.key('w/arrow-up', function() {
-    socket.emit("move", {dir: "up"})
+    socket.emit("player-move", {dir: "up"})
     event.preventDefault();
   });
   jwerty.key('s/arrow-down', function(e) {
-    socket.emit("move", {dir: "down"})
+    socket.emit("player-move", {dir: "down"})
     event.preventDefault();
   });
   jwerty.key('f/space', function(e) {
-    socket.emit('shoot');
+    socket.emit('player-shoot');
     event.preventDefault();
   });
+  jwerty.key('e', function(e) {
+    turn(true);
+  });
+  jwerty.key('q', function(e) {
+    turn();
+  });
+  var turn = function(right) {
+    var dir = world.player.dir;
+    var dirs = ["up", "right", "down", "left"];
+    var cur = dirs.indexOf(dir);
+    var val = cur + (right ? 1 : -1);
+    if(val == -1) val = dirs.length-1;
+    if(val >= dirs.length) val = 0;
+    socket.emit('player-turn', {dir: dirs[val]});
+    
+  };
+
   render();
-  renderPlayers(world.players);
+  renderPlayers(world.others);
   renderPlayer(world.player, true);
-});
-socket.on('moved', function(data) {
+
+  });
+socket.on('player-moved', function(data) {
   var you = false;
   if(data.player.id === world.player.id) {
     world.player.location = data.player.location;
+    world.player.dir = data.player.dir;
     you = true;
   }
   renderPlayer(data.player, you);
@@ -63,7 +82,7 @@ var removeBullet = function(bullet) {
   $("#"+bullet.id).addClass('destroyed').fadeOut("fast", function() { $(this).remove(); });
 }
 
-socket.on('player-nick', function(data) {
+socket.on('player-nick-changed', function(data) {
   toast(data.oldNick + " is now known as " + data.player.nick);
 });
 

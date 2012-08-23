@@ -1,4 +1,4 @@
-.toast-container{width:280px;z-index:9999;}
+.toast-container{z-index:9999;}
 * html .toast-container{position:absolute;}
 .toast-item{font-family:Tahoma, sans-serif;height:auto;background:#333;opacity:.9;color:#eee;padding-top:5px;padding-bottom:5px;padding-left:5px;padding-right:5px;font-size:14px;border:2px solid #999;display:block;position:relative;margin:0 0 12px 0;}
 .toast-item-image-success{background:url(../images/success.png);}

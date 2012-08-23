@@ -1,5 +1,7 @@
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+.clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.clearfix { display: inline-block; } 
 
 /* OTZ Styles */
 body {
@@ -25,14 +27,14 @@ h1 {
 }
 
 .world .player {
-  background:url(/img/tank.png) center center no-repeat;
+  background:white;
   position:absolute;
   width:16px;
   height:16px;
   padding:2px;
 }
   .world .you {
-    background:url(/img/you.png) center center no-repeat;
+    background:orange;
   }
 
 .world .bullet {
@@ -43,13 +45,6 @@ h1 {
   border-radius:2px;
   margin:8px;
 }
-  .world .bullet.destroyed {
-    background: orange;
-    width:8px;
-    height:8px;
-    margin:6px;
-    border-radius:4px;
-  }
 
 .world .cell {
   position:relative;
@@ -58,25 +53,11 @@ h1 {
   float:left;
 }
   .cell.grass {
-    background:green url(/img/texture-grass.png);
+    background:green;
   }
   .cell.rock {
-    background:grey url(/img/texture-rock.png);
+    background:grey;
   }
 .world .row {
   clear:both;
 }
-
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
- 
-.clearfix {
-	display: inline-block;
-}
-

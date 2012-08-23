@@ -1,0 +1,208 @@
+/**
+ * Copyright (C) 2012, Peter Wooley
+ * http://peterwooley.com - peter@peterwooley.com
+ */
+* {
+	margin:0;
+	padding:0;
+}
+
+body, html {
+	background:#ddd;
+	color:#555;
+	font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+	line-height:1.4;
+}
+
+body {
+  padding:1em;
+}
+
+.container {
+  max-width:736px;
+  padding-right:185px;
+  margin:0 auto;
+}
+
+a {
+	color:#111;
+	text-decoration:none;
+  border-bottom: 1px solid #999;
+}
+a:visited {
+	color:#222;
+}
+a:hover {
+	color:#666;
+}
+
+h1, h2 {
+  font-size: 1.5em;
+  padding: 1.25em 0;
+	font-family: Impact, fantasy;
+	line-height: 1.2;
+	font-weight:normal;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+h1 {
+	font-size:2.8em;
+	letter-spacing:-1px;
+  padding:0;
+}
+
+h2 {
+    padding:1em 0 0;
+    font-size: 1.8em;
+}
+
+h3 {
+    padding:1.5em 0 .5em;
+    font-size: 1.4em;
+}
+h3 code {
+  border-color:#999;
+  display:block;
+  padding:.5ex;
+  border-radius:5px;
+}
+
+h4 {
+    margin:1em 0 .5em;
+    font-size: 1.0em;
+}
+
+li {
+    font-size: 1em;
+}
+
+p {
+    font-size: 1em;
+	line-height:1.5em;
+    margin:.25em 0;
+}
+
+ol, ul {
+    list-style: disc outside none;
+    margin-left: 2em;
+	margin-bottom:1em;
+}
+
+ol {
+    list-style-type: decimal;
+}
+
+table {
+	border-collapse:collapse;
+	text-align:left;
+  width:100%;
+}
+	table th {
+        background:#aaa;
+        border-bottom:1px solid #999;
+		padding:3px 10px;
+		white-space:nowrap;
+        text-shadow:0 1px 0 rgba(255,255,255,.3);
+	}
+	table td {
+		padding:5px 5px;
+    border-bottom:1px solid #bbb;
+  vertical-align:top;
+	}
+
+pre code {
+	border-radius:5px;
+	padding:1em;
+  border:none;
+}
+
+td pre {
+  margin:1ex 0;
+}
+
+/** References links */
+a[rel=src] {
+    font-size: .6em;
+}
+a[rel=src]:before {
+    content: "ref:";
+}
+
+sup {
+    font-size:.7em;
+    vertical-align:top;
+}
+a sup {
+    color: #0645AD;
+    font-style:italic;
+}
+
+ins {
+    text-decoration:underline;
+}
+
+code {
+  font-family: Consolas, Menlo, monospace;
+  background:rgba(255,255,255,.2);
+  padding:2px;
+  border:1px solid #ccc;
+}
+
+.toc {
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    position: fixed;
+    background: #333;
+    box-shadow: inset 1px 0 5px 0px #222;
+    width: 185px;
+    padding-top: 20px;
+    color: #fff;
+}
+
+.toc ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.toc li {
+    padding: 5px 10px;
+}
+
+.toc a {
+    color: #fff;
+    text-decoration: none;
+    border:none;
+    display: block;
+}
+
+.toc .toc-h2 {
+    padding-left: 10px;
+}
+
+.toc .toc-h3 {
+    padding-left: 20px;
+    font-family: Consolas, monospace;
+    font-size:90%;
+}
+
+.toc .toc-active {
+    background: #336699;
+    box-shadow: inset 2px 0px 10px -5px #000;
+}
+
+.required {
+  background:#E9C8CE;
+  border:1px solid #CA5B5B;
+  border-radius: 3px;
+  padding:2px;
+  font-size:70%;
+}
+
+.thanks {
+  color:#777;
+  margin-top:2em;
+  text-align:center;
+  text-shadow:0 1px 0 #fff;
+}

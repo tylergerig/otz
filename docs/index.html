@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Client Docs &mdash; Oily T-Zone: A Tank Game</title>
+    <link rel="stylesheet" href="lib/highlight/styles/tomorrow-night-eighties.css">
+    <link href="http://fonts.googleapis.com/css?family=Terminal+Dosis+Light:regular&v1" rel="stylesheet" type="text/css" >
+    <link type="text/css" rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <div class="toc"></div>
+    <div class="container">
+
+    <h1>OTZ Client Docs</h1>
+
+    <h2>Setting Up a Client</h2>
+    <p><dfn title="Oily T-Zone">OTZ</dfn> uses Socket.IO to communicate to and from the game server. Creating a client is as easy as spinning up a Socket.IO connection.</p>
+    <pre><code>// Assume socket.io.js has been included prior to this script.
+var socket = io.connect("localhost:3000");
+var world;
+socket.on('game-enter', function(data) {
+  world = data;
+  // You now have access to the world.map, world.player (you) and world.others
+  // Which is everything you need to get started
+});
+</code></pre>
+
+    <h2>Common Objects</h2>
+    <p>There are a few objects that are very commonly sent from the game server.</p>
+    <h3 id="object-tile">Tile</h3>
+    <p>A tile represents a piece of the game world. An OTZ game world consists of 32&times;32 tiles. It contains information pertaining to its location in the world (<code>x</code> and <code>y</code>) as well as if it's <code>navigable</code> and what <code>material</code> occupies the tiles.</p>
+    <pre><code>{
+    id: "t133",
+    material: "grass",
+    navigable: true,
+    x: 23,
+    y: 17
+}</code></pre>
+
+    <h3 id="object-player">Player</h3>
+    <p>Each player object contains enough info to let you know who the player is (<code>nickname</code> &amp; <code>id</code>), where in the world they are (<code>location</code>, which is a <a href="#object-tile">tile object</a>), what direction they're facing (<code>dir</code>) and their <code>speed</code>.</p>
+    <pre><code>{
+  alive: true,
+  dir: "up",
+  id: "p1",
+  lastMoved: null,
+  lastShot: null,
+  location: {
+    id: "t133",
+    material: "grass",
+    navigable: true,
+    x: 23,
+    y: 17
+  },
+  nick: "depressed-oranges",
+  speed: 5
+}</code></pre>
+
+    <h3 id="object-bullet">Bullet</h3>
+    <p>Each bullet contains information about the direction of the bullet, owner of the bullet (a <a href="#object-player">Player object</a>) and current location (a <a href="#object-tile">Tile object</a>).</p>
+    <pre><code>  var bullet = {
+  id: "b1337",
+  location: {
+    id: "t105",
+    material: "grass",
+    navigable: true,
+    x:23,
+    y:16
+  },
+  dir: "right",
+  speed: 10,
+  lastMoved: null,
+  owner: { /* Excluded for brevity */ }
+};</code></pre>
+
+    <h2 id="incoming">Incoming Events</h2>
+    <p>Incoming events are sent from the game server to your client and are fired when something changes in the game world. Your client needs to listen for and process the data sent in the events. Listening for some events is required (<code>game-enter</code>, <code>player-moved</code>, etc.) where others are just helpful for the user (<code>player-nick-changed</code>, etc).</p>
+
+    <h3><code>game-enter</code></h3>
+    <span class="required">Required</span>
+    <p>Fired as soon as the client successfully connects to the game server (and fired again following a reconnect).</p>
+
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>map</code></td>
+          <td>A multi-dimensional array of <a href="#object-tile">Tile objects</a>, which contain enough info to render the map.
+            <pre><code>[
+  [ /* 32 Tile objects */ ],
+  [ /* 32 Tile objects */ ],
+  [ /* 32 Tile objects */ ],
+  /* 29 more array of Tile objects... */
+]</code></pre>
+          </td>
+        </tr>
+        <tr>
+          <td><code>player</code></code></td>
+          <td>A single <a href='#object-player'>Player object</a>, which represents your player.</td>
+        </tr>
+        <tr>
+          <td><code>others</code></td>
+          <td>An array of <a href='#object-player'>Player objects</a> representing all other players.</a>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('game-enter', function(data) {
+  world = data;
+  renderMap(world.map);
+  renderPlayer(world.player);
+  renderPlayers(world.others);
+});</code></pre>
+
+    <h3><code>player-moved</code></h3>
+    <span class="required">Required</span>
+    <p>Sent whenever a player moves (this includes the current player). Using the data provided, you can update the position of any player.</p>
+    
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>player</code></code></td>
+          <td>A <a href='#object-player'>Player object</a> with a new <code>location</code> or <code>dir</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('player-moved', function(data) {
+  renderPlayer(data.player);
+});</code></pre>
+
+    <h3><code>player-joined</code></h3>
+    <p>Sent whenever a new player joins the game. This can be used to keep an up-to-date list connected players.</p>
+    
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>player</code></code></td>
+          <td>A <a href='#object-player'>Player object</a>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('player-joined', function(data) {
+  console.log(data.player.nick + " joined.");
+});</code></pre>
+
+    <h3><code>player-killed</code></h3>
+    <p>Sent whenever a player is killed. The data contains both the player that died as well as the killer (this is how you might track kill/death stats).</p>
+
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>player</code></code></td>
+          <td>A <a href='#object-player'>Player object</a> of the player that died.</td>
+        </tr>
+        <tr>
+          <td><code>killer</code></code></td>
+          <td>A <a href='#object-player'>Player object</a> of the player that killed <code>data.player</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('player-killed', function(data) {
+  console.log(data.killer.nick + " killed " + data.player.nick);
+});</code></pre>
+
+    <h3><code>player-nick-changed</code></h3>
+    <p>Sent whenever a player changes their nick. (See <code><a href="#player-nick">player-nick</a></code>)</p>
+
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>player</code></code></td>
+          <td>A <a href='#object-player'>Player object</a> of the player that changed their nick.</td>
+        </tr>
+        <tr>
+          <td><code>oldNick</code></code></td>
+          <td>A string containing <code>data.player</code>'s old nickname.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('player-nick-changed', function(data) {
+  console.log(data.oldNick + " is now known as " + data.player.nick);
+});</code></pre>
+
+    <h3><code>player-quit</code></h3>
+
+    <p>Sent wen a player quits. This allows you to prune a list of connected players you may have created with the help of <code>player-joined</code>.</p>
+
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>player</code></code></td>
+          <td>A <a href='#object-player'>Player object</a> of the player that quit.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('player-quit', function(data) {
+  console.log(data.player.nick + " quit.");
+});</code></pre>
+
+    <h3><code>bullet-moved</code></h3>
+    <span class="required">Required</span>
+    <p>Sent whenever a bullet moves. In a large game, this is sent <em>very often</em>. This allows you to animate a bullet to a new location.</p>
+
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>bullet</code></code></td>
+          <td>A <a href='#object-bullet'>Bullet object</a>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('bullet-moved', function(data) {
+  renderBullet(data.bullet);
+});</code></pre>
+
+    <h3><code>bullet-destroyed</code></h3>
+    <span class="required">Required</span>
+    <p>Sent whenever a bullet hits a wall or other player. This is where you get to make the bullet explode/shatter/burn up/etc.</p>
+
+    <h4>Data Provided</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>bullet</code></code></td>
+          <td>A <a href='#object-bullet'>Bullet object</a> that was just destroyed.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('bullet-destroyed', function(data) {
+  destroyBullet(data.bullet);
+});</code></pre>
+
+    <h3><code>disconnect</code></h3>
+
+    <p>This is a built-in Socket.IO event, but if it happens, your connection to the server is lost. Hook this if you want to present a kill screen in the event that you lose your connection to the server (or the server fails).</p>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('disconnect', function() {
+  console.log("Ah! We just lost the connection to the server!");
+});</code></pre>
+
+    <h3><code>reconnect</code></h3>
+
+    <p>This is a built-in Socket.IO event, but if the user lost their connection and you showed a kill screen or something similar, this gives you a hook to remove the kill screen. Following this event, a <code>game-enter</code> will be sent to your client, so the game world, your player and other players should be re-rendered.</p>
+
+    <h4>Example</h4>
+    <pre><code>socket.on('reconnect', function() {
+  console.log("Prepare to join the game as a new user.");
+});</code></pre>
+
+    <h2>Outgoing Events</h2>
+
+    <h3><code>player-move</code></h3>
+    <span class="required">Required</span>
+    <p>Send this when you want your player to move. You just indicate your direction. If your move is allowed by the server, you'll get a <code>player-moved</code> event for your player. <em>You should not animate the movement of your player until you receive the <code>player-moved</code> event.</em></p>
+
+    <h4>Data Expected</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>dir</code></code></td>
+          <td>A string represting the direction you want to move the player.<br />Allowed values are <code>up</code>, <code>right</code>, <code>down</code> and <code>left</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code class="javascript">socket.emit("player-move", {dir: "left"})</code></pre>
+
+    <h3><code>player-turn</code></h3>
+    <p>Send this when you want to turn your player without moving to an adjacent tile. This allows you to shoot in all four directions without leaving your tile.</p>
+
+    <h4>Data Expected</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>dir</code></code></td>
+          <td>A string represting the direction you want to turn the player.<br />Allowed values are <code>up</code>, <code>right</code>, <code>down</code> and <code>left</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code class="javascript">socket.emit("player-turn", {dir: "left"})</code></pre>
+
+    <h3><code>player-shoot</code></h3>
+    <span class="required">Required</span>
+    <p>Shooting is the name of the game (Well, it's actually Oily T-Zone). Fire this when you want to shoot. Whichever direction you're currently facing, the bullet will leave in that direction. It will be destroyed (see <code>bullet-destroyed</code>) when it hits a stone, a wall or another player. If it hits another player, a <code>played-killed</code> will be sent to all players.</p>
+
+    <h4>Example</h4>
+    <pre><code class="javascript">socket.emit("player-shoot")</code></pre>
+
+    <h3><code>player-nick</code></h3>
+
+    <p>You get a sweet nickname whenever you connect to the server (immense-bean, sassy-doctor, bite-sized-deer, etc.). If you want to change it, you can send a <code>player-nick</code> with your desired nick, and if it's not in use, a <code>player-nick-changed</code> event will be sent to all players.</p>
+
+    <h4>Data Expected</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>nick</code></code></td>
+          <td>A string containing your desired nickname. Nicknames can be up to 42 characters long and contain any character.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Example</h4>
+    <pre><code class="javascript">socket.emit("player-nick", {nick: "acid-burn"})</code></pre>
+
+
+    <p class="thanks">Thanks for making an OTZ Game Client!</p>
+    </div>
+      
+    <!-- Common Scripts -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    <script src="lib/highlight/highlight.pack.js"></script>
+    <script src="js/jquery.toc.min.js"></script>
+    <script src="js/jquery.noisy.min.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>

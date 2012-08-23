@@ -1,26 +1,26 @@
-var socket = io.connect(location);
+var socket = io.connect(location); // Use "peterwooley.com:4242" to play on the live server
 var world;
 socket.on('game-enter', function(data) {
   world = data;
-  jwerty.key('a/arrow-left', function() {
+  jwerty.key('a/arrow-left', function(e) {
     socket.emit("player-move", {dir: "left"})
-    event.preventDefault();
+    e.preventDefault();
   });
-  jwerty.key('d/arrow-right', function() {
+  jwerty.key('d/arrow-right', function(e) {
     socket.emit("player-move", {dir: "right"})
-    event.preventDefault();
+    e.preventDefault();
   });
-  jwerty.key('w/arrow-up', function() {
+  jwerty.key('w/arrow-up', function(e) {
     socket.emit("player-move", {dir: "up"})
-    event.preventDefault();
+    e.preventDefault();
   });
   jwerty.key('s/arrow-down', function(e) {
     socket.emit("player-move", {dir: "down"})
-    event.preventDefault();
+    e.preventDefault();
   });
   jwerty.key('f/space', function(e) {
     socket.emit('player-shoot');
-    event.preventDefault();
+    e.preventDefault();
   });
   jwerty.key('e', function(e) {
     turn(true);
@@ -55,7 +55,6 @@ socket.on('player-moved', function(data) {
 });
 
 socket.on('bullet-moved', function(data) {
-  console.log('bullet-moved');
   renderBullet(data.bullet);
 });
 
@@ -86,7 +85,7 @@ socket.on('player-nick-changed', function(data) {
   toast(data.oldNick + " is now known as " + data.player.nick);
 });
 
-socket.on('player-died', function(data) {
+socket.on('player-killed', function(data) {
   killPlayer(data.player, data.killer);
 });
 

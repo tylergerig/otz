@@ -1,14 +1,18 @@
 {
   "name": "otz",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "3.0.0rc3",
     "jade": "*",
-    "socket.io": "~0.9.10",
+    "socket.io": "~0.9.0",
     "moniker": "~0.1.2"
+  },
+  "subdomain": "otz",
+  "engines": {
+    "node": "0.8.x"
   }
 }

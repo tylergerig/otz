@@ -1,6 +1,6 @@
 {
-  "name": "otz",
-  "version": "1.0.0",
+  "name": "KobK",
+  "version": "1.0.0-0",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -11,7 +11,7 @@
     "socket.io": "~0.9.0",
     "moniker": "~0.1.2"
   },
-  "subdomain": "otz",
+  "subdomain": "KobK",
   "engines": {
     "node": "0.8.x"
   }

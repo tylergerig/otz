@@ -22,7 +22,7 @@ otz.listen(server);
 app.get('/', function(req, res) { res.render('index'); });
 
 server.listen(app.get('port'), function(){
-  console.log("OTZ server listening on port " + app.get('port'));
+  console.log("KobK server listening on port " + app.get('port'));
 });
 
 

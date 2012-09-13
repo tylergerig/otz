@@ -12,7 +12,7 @@ body {
 
 .container {
   margin:10px auto;
-  width:660px;
+  width:960px;
   padding:10px;
 }
 
@@ -32,17 +32,28 @@ h1 {
   width:16px;
   height:16px;
   padding:2px;
+  background:url('../img/endown.png') no-repeat center center;
 }
   .world .you {
-    background:orange;
+    background:url('../img/youdown.png') no-repeat center center;
   }
-
-.world .bullet {
+  
+.world .mob {
   background:white;
   position:absolute;
-  width:4px;
-  height:4px;
-  border-radius:2px;
+  width:16px;
+  height:16px;
+  padding:2px;
+  background:url('../img/you2.png') no-repeat center center;
+}
+
+
+
+.world .bullet {
+  background:url('../img/bullet.png');
+  position:absolute;
+  width:8px;
+  height:16px;
   margin:8px;
 }
 
@@ -53,10 +64,10 @@ h1 {
   float:left;
 }
   .cell.grass {
-    background:green;
+    background:url('../img/texture-grass.png');
   }
   .cell.rock {
-    background:grey;
+    background:url('../img/texture-rock.png');
   }
 .world .row {
   clear:both;

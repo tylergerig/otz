@@ -1,0 +1,11 @@
+{
+  "name": "otz.js",
+  "subdomain": "tjgerig",
+  "scripts": {
+    "start": "otz.js"
+  },
+  "version": "0.0.0",
+  "engines": {
+    "node": "0.8.x"
+  }
+}

@@ -182,15 +182,9 @@ socket.on('player-killed', function(data) {
   toast(data.killer.nick + " killed " + data.player.nick);
   toast(data.killer.nick + " has " + data.killer.exp + " exp.");
   if(data.player.type === "item") {
-	toast(data.killer.nick + "'s speed has increased to " + data.killer.speed + " for 20 seconds.");
+	toast(data.killer.nick + "'s speed has increased to " + data.killer.speed);
   }
 });
-
-socket.on('mob-killed', function(data) {
-  toast(data.killer.nick + " killed " + data.mob);
-  toast(data.killer.nick + " got " + data.killer.exp + " exp.");
-});
-
 
 socket.on('player-leveled', function(data) {
   toast(data.player.nick + " is now level " + data.player.level);

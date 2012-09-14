@@ -1,6 +1,6 @@
 {
   "name": "KobK",
-  "version": "1.0.0-9",
+  "version": "1.0.0-15",
   "private": true,
   "scripts": {
     "start": "node app.js"

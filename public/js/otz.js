@@ -49,11 +49,14 @@ var renderPlayer = function(player, you) {
   var $el = $("#"+player.id);
   if(!$el.length) {
     $el = $("<div>").attr('id', player.id).addClass('player').hide().appendTo('.world');
+	if(player.type === "item") {
+		$el.addClass('item');
+	}
     if(you) $el.addClass('you');
     move = false;
   }
   var offset = $(".row:eq("+player.location.y+") .cell:eq("+player.location.x+")").position();
-  if(move && you) {
+  if(move && you && player.type !== "item") {
     $el.animate(offset, 500/player.speed, "linear");
 	if(player.dir === "left") {
 		$el.css("background", "url('../img/youleft.png') no-repeat center center");
@@ -63,8 +66,8 @@ var renderPlayer = function(player, you) {
 	}
 	else if(player.dir === "up") {
 		$el.css("background", "url('../img/youup.png') no-repeat center center");
-	}
-	else if(player.dir === "down") {
+
+	} else if(player.dir === "down") {
 		$el.css("background", "url('../img/youdown.png') no-repeat center center");
 	}
   } else if(move) {
@@ -85,29 +88,18 @@ var renderPlayer = function(player, you) {
   } else {
     $el.css(offset).fadeIn();
   }
+  
+  if(you) {
+	world.player.speed = player.speed;
+  }
 };
-var potion = function(item){
-	if(world.player.type === "item" ){
-		$el.css("background", "url('../img/endown.png') no-repeat center center");
-	}
-};
+
 var renderPlayers = function(players) {
   for(var i = 0; i < players.length; i++) {
     renderPlayer(players[i]);
   } 
 };
 
-var renderMob = function(mob) {
-  for(var i = 0; i < mob.length; i++) {
-    renderMob(mob[i]);
-  }    
-};
-var renderItem = function(item) {
-  for(var i = 0; i < item.length; i++) {
-    renderItem(item[i]);
-  }
-
-};
 
 var killPlayer = function(player, killer) {
   var $el = $("#"+player.id);
@@ -188,17 +180,15 @@ socket.on('player-quit', function(data) {
 
 socket.on('player-killed', function(data) {
   toast(data.killer.nick + " killed " + data.player.nick);
-  toast(data.killer.nick + " got " + data.killer.exp + " exp.");
+  toast(data.killer.nick + " has " + data.killer.exp + " exp.");
+  if(data.player.type === "item") {
+	toast(data.killer.nick + "'s speed has increased to " + data.killer.speed + " for 20 seconds.");
+  }
 });
 
 socket.on('mob-killed', function(data) {
   toast(data.killer.nick + " killed " + data.mob);
   toast(data.killer.nick + " got " + data.killer.exp + " exp.");
-});
-
-socket.on('item-killed', function(data) {
-  toast(data.killer.nick + " killed " + data.item);
-  toast(data.killer.nick + " your speed has increased to " + data.killer.speed);
 });
 
 

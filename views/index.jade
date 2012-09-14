@@ -4,6 +4,10 @@ html
     title KobK: The RPG
     link(rel='stylesheet', href='/css/index.css')
     link(rel='stylesheet', href='/css/jquery.toastmessage-min.css')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Russo+One')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Nosifer')
+
+    
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js')
     script(src='/js/jwerty.js')
     script(src='/js/jquery.toastmessage-min.js')
@@ -11,5 +15,46 @@ html
   body
     .container
       h1 Kill or be Killed: The RPG
+      .right        
+        ul
+          h2 Controls
+          li 
+            p Up
+            img(src='../img/arrowUp.png') 
+          li 
+            p Down  
+            img(src='../img/arrowDown.png') 
+          li 
+            p Left 
+            img(src='../img/arrowLeft.png') 
+          li 
+            p Right  
+            img(src='../img/arrowRight.png') 
+          li 
+            p Turn Up
+            img(src='../img/w.png') 
+          li 
+            p Turn Down
+            img(src='../img/s.png') 
+          li 
+            p Turn Left 
+            img(src='../img/a.png') 
+          li 
+            p Turn Right
+            img(src='../img/d.png') 
+          li
+            p Shoot
+            img(src='../img/space.png') 
+        ul
+          h2 Targets
+          li
+            p You
+            img(src='../img/youdown.png') 
+          li
+            p Mob
+            img(src='../img/endown.png') 
+          li
+            p Item
+            img(src='../img/potion.png') 
       .world.clearfix
       script(src='/js/otz.js')

@@ -6,24 +6,53 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 /* OTZ Styles */
 body {
   font-family: Impact, fantasy;
-  background:#333;
+  background:#210101;
   color:#fff;
 }
 
 .container {
   margin:10px auto;
-  width:960px;
+  width:1160px;
   padding:10px;
+}
+.right{
+  float: right;
+  width: 420px;
+  position: relative;
+  right: 65px;
+}
+.right li{
+  margin-bottom: 10px;
+  font-size: 1.80em;
+  color: #CC9514;
+  font-family: 'Russo One', sans-serif;
+  height:40px;
+  width: 220px;
+}
+.right p{
+  float: left;
+}
+.right img{
+	float:right;
+	position:relative;
+}
+h1, h2{
+	color: #9C0909;
+	font-family: 'Nosifer', cursive;
 }
 
 h1 {
-  font-size:1.5em;
+  font-size:2.10em;
+}
+h2 {
+  font-size:1.90em;
+  padding-bottom: 5px;
 }
 
 .world {
   position:relative;
   padding:10px;
-  background:#444;
+  background:#300000;
 }
 
 .world .player {
@@ -38,6 +67,7 @@ h1 {
     background:url('../img/youdown.png') no-repeat center center;
   }
   
+  
 .world .mob {
   background:white;
   position:absolute;
@@ -45,6 +75,9 @@ h1 {
   height:16px;
   padding:2px;
   background:url('../img/you2.png') no-repeat center center;
+}
+.world .item{
+  background:url('../img/potion.png') no-repeat center center;
 }
 
 
